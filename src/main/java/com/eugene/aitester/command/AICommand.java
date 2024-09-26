@@ -33,15 +33,17 @@ public class AICommand {
     public String askQuestionwithKeyword(@ShellOption(defaultValue = "I have a question") String arg) {
         String question = formatStringToSentence(arg);
         // q LOG.info("- Args for q command is :" + question);
-        Map<String, String> res = ollamaChatService.generate(question);
-        Collection<String> vals = res.values();
-        String getFirst = null;
-        for (String s : vals) {
-            // LOG.info("Response is :" + s);
-            getFirst = s;
-        }
-        return getFirst;
-
+        /*
+         * Map<String, String> res = ollamaChatService.generate(question);
+         * Collection<String> vals = res.values();
+         * String getFirst = null;
+         * for (String s : vals) {
+         * // LOG.info("Response is :" + s);
+         * getFirst = s;
+         * }
+         * return getFirst;
+         */
+        return ollamaChatService.generate(question);
     }
 
     private String formatStringToSentence(String args) {
