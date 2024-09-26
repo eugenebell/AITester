@@ -3,17 +3,18 @@ package com.eugene.aitester.service;
 import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import reactor.core.publisher.Flux;
 
 @Service
 public class OllamaChatService {
@@ -22,9 +23,18 @@ public class OllamaChatService {
 
     private final ChatClient chatClient;
 
+    // private String voice = "Robert DeNiro";
+
+    private ChatMemory chatMemory;
+
     @Autowired
     public OllamaChatService(ChatClient.Builder chatClientBuilder) {
         this.chatClient = chatClientBuilder.build();
+    }
+
+    @Autowired
+    public void setChatMemory(InMemoryChatMemory chatMemory) {
+        this.chatMemory = chatMemory;
     }
 
     /*
@@ -33,11 +43,17 @@ public class OllamaChatService {
      * this.chatModel = chatModel;
      * }
      */
-    public String generate(String message) {
+    public String generate(String message, String conversationId, int chatHistoryWindowSize) {
         return this.chatClient.prompt()
+                // .system(sp -> sp.param("voice", voice))
+                .advisors(new MessageChatMemoryAdvisor(chatMemory, conversationId, chatHistoryWindowSize))
                 .user(message)
                 .call()
                 .content();
+    }
+
+    public void clearMemory(String conversationId) {
+        chatMemory.clear(conversationId);
     }
 
     /*

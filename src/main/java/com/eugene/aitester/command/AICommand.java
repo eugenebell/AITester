@@ -17,6 +17,7 @@ public class AICommand {
 
     private static final Logger LOG = LogManager.getLogger(AICommand.class);
     private OllamaChatService ollamaChatService;
+    private String conversationId = "genericIDForNow";
 
     @Autowired
     public AICommand(OllamaChatService ocs) {
@@ -43,7 +44,12 @@ public class AICommand {
          * }
          * return getFirst;
          */
-        return ollamaChatService.generate(question);
+        return ollamaChatService.generate(question, conversationId, 10);
+    }
+
+    @ShellMethod(key = { "c", "clear", "wipe" })
+    public void clearMemory() {
+        ollamaChatService.clearMemory(conversationId);
     }
 
     private String formatStringToSentence(String args) {
