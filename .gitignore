@@ -1,0 +1,6 @@
+aitester.log
+target/classes/application.properties
+target/*
+target/aitester-0.0.1-SNAPSHOT.jar
+target/aitester-0.0.1-SNAPSHOT.jar.original
+.vscode/settings.json
