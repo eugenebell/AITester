@@ -30,7 +30,7 @@ public class AICommand {
         return "Hello world " + arg;
     }
 
-    @ShellMethod(key = "q")
+    @ShellMethod(key = { "q", "question" })
     public String askQuestionwithKeyword(@ShellOption(defaultValue = "I have a question") String arg) {
         String question = formatStringToSentence(arg);
         // q LOG.info("- Args for q command is :" + question);
@@ -50,6 +50,21 @@ public class AICommand {
     @ShellMethod(key = { "c", "clear", "wipe" })
     public void clearMemory() {
         ollamaChatService.clearMemory(conversationId);
+    }
+
+    @ShellMethod(key = { "v", "voice", "set voice" })
+    public void setVoice(String arg) {
+        ollamaChatService.setVoice(formatStringToSentence(arg));
+    }
+
+    @ShellMethod(key = { "rv", "reset voice" })
+    public void resetVoice(String arg) {
+        ollamaChatService.resetVoice();
+    }
+
+    @ShellMethod(key = { "gv", "get voice" })
+    public void getVoice() {
+        ollamaChatService.getVoice();
     }
 
     private String formatStringToSentence(String args) {

@@ -16,7 +16,10 @@ class Config {
 
     @Bean
     ChatClient chatClient(ChatClient.Builder builder) {
-        return builder.build();
+        return builder// .defaultSystem("You are a friendly chat bot that answers question in the
+                      // voice of a {voice}")
+                      // .defaultOptions(null)
+                .build();
     }
 
     @Bean
