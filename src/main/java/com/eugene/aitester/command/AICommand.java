@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+
+import java.io.IOException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,8 +32,8 @@ public class AICommand {
     }
 
     @ShellMethod(key = { "c", "clear", "wipe" })
-    public void clearMemory() {
-        ollamaChatService.clearMemory(conversationId);
+    public void clearMemoryAndHistory() {
+        ollamaChatService.clearMemoryAndHistory(conversationId);
     }
 
     @ShellMethod(key = { "v", "voice", "set voice" })
@@ -46,6 +49,17 @@ public class AICommand {
     @ShellMethod(key = { "gv", "get voice" })
     public void getVoice() {
         ollamaChatService.getVoice();
+    }
+
+    @ShellMethod(key = { "w", "write" })
+    public void writeToFile(String path) {
+        String file = formatStringToSentence(path);
+        LOG.info("Output path is :" + file);
+        try {
+            ollamaChatService.writeToFile(file);
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 
     private String formatStringToSentence(String args) {
