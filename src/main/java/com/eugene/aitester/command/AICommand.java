@@ -1,8 +1,5 @@
 package com.eugene.aitester.command;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -24,26 +21,10 @@ public class AICommand {
         this.ollamaChatService = ocs;
     }
 
-    @ShellMethod(key = "hello-world")
-    public String helloWorld(
-            @ShellOption(defaultValue = "spring") String arg) {
-        return "Hello world " + arg;
-    }
-
     @ShellMethod(key = { "q", "question" })
     public String askQuestionwithKeyword(@ShellOption(defaultValue = "I have a question") String arg) {
         String question = formatStringToSentence(arg);
-        // q LOG.info("- Args for q command is :" + question);
-        /*
-         * Map<String, String> res = ollamaChatService.generate(question);
-         * Collection<String> vals = res.values();
-         * String getFirst = null;
-         * for (String s : vals) {
-         * // LOG.info("Response is :" + s);
-         * getFirst = s;
-         * }
-         * return getFirst;
-         */
+        LOG.debug("- Args for q command is :" + question);
         return ollamaChatService.generate(question, conversationId, 10);
     }
 

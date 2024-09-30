@@ -1,31 +1,18 @@
 package com.eugene.aitester.service;
 
-import java.util.Map;
-
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.ollama.OllamaChatModel;
-import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OllamaChatService {
 
-    // private final OllamaChatModel chatModel;
     private final static String DEFAULT_NAME = "Normal";
-
     private final ChatClient chatClient;
-
     private String voice = DEFAULT_NAME;
-
     private ChatMemory chatMemory;
 
     @Autowired
@@ -38,16 +25,9 @@ public class OllamaChatService {
         this.chatMemory = chatMemory;
     }
 
-    /*
-     * @Autowired
-     * public OllamaChatService(OllamaChatModel chatModel) {
-     * this.chatModel = chatModel;
-     * }
-     */
     public String generate(String message, String conversationId, int chatHistoryWindowSize) {
         return this.chatClient.prompt()
                 .system("You are a friendly chat bot that answers question in the voice of " + voice)
-                // .system(sp -> sp.param("voice", voice))
                 .advisors(new MessageChatMemoryAdvisor(chatMemory, conversationId, chatHistoryWindowSize))
                 .user(message)
                 .call()
@@ -70,13 +50,4 @@ public class OllamaChatService {
         this.voice = DEFAULT_NAME;
     }
 
-    /*
-     * public Map<String, String> generate(String message) {
-     * return Map.of("generation", chatModel.call(message));
-     * }
-     * public Flux<ChatResponse> generateStream(String message) {
-     * Prompt prompt = new Prompt(new UserMessage(message));
-     * return chatModel.stream(prompt);
-     * }
-     */
 }
