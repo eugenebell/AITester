@@ -27,3 +27,10 @@ Finally, in a separate shell, run a model:
 Test using curl:
 curl http://localhost:11434/api/generate -d "{\"model\": \"llama3.1\",  \"prompt\":\"Why is the sky blue?\"}"
 
+
+Examples for Ollama and add huggingface models
+https://medium.com/@sudarshan-koirala/ollama-huggingface-8e8bc55ce572
+
+Other interesting models
+coding - https://ollama.com/library/stable-code
+
